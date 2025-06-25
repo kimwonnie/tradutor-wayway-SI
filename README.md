@@ -1,41 +1,48 @@
-📚 Portal de Histórias
-Bem-vindo ao Portal de Histórias, um site desenvolvido para permitir que escritores independentes publiquem suas obras e que leitores possam acessá-las por categorias, gêneros ou autores.
+📚 Plataforma Wai Wai – Tradução Acadêmica Segura
+Bem-vindo à Plataforma Wai Wai, um site desenvolvido para facilitar a tradução de termos acadêmicos da língua indígena Wai Wai para o Português. Voltado especialmente para estudantes, professores e linguistas, o portal promove a inclusão educacional e a valorização da língua indígena por meio de uma ferramenta segura, colaborativa e culturalmente respeitosa.
 
 🌐 Demonstração
-Acesse o site publicado aqui:
-👉 https://kimwonnie.github.io/portal-de-historias/
+Acesse a versão pública do site aqui:
+👉 (link futuro do GitHub Pages ou servidor local)
 
 🎯 Objetivo
-O objetivo deste projeto é criar um portal completo com:
+O objetivo deste projeto é criar uma plataforma segura e acessível com:
 
-Cadastro e login de usuários
-Publicação de histórias e capítulos
-Perfil do autor com capa e foto de perfil
-Leitura de capítulos com modo escuro
-Edição de perfil
-Biblioteca de histórias salvas
-Navegação por categorias
+Tradução de termos acadêmicos Wai Wai ↔ Português
+
+Cadastro e login de usuários com autenticação
+
+Sugestão de novos termos (com validação por especialistas)
+
+Área do usuário com histórico e favoritos
+
+Acesso diferenciado para linguistas, professores e estudantes
+
+Interface acessível, com modo escuro e navegação intuitiva
+
+Preservação linguística com curadoria cultural
+
 🧪 Tecnologias Utilizadas
+
 HTML5
-CSS3 (com gradiente roxo/cinza)
+CSS3 (com gradiente em tons naturais)
 JavaScript
 Git e GitHub
-GitHub Pages
+GitHub Pages (ou servidor Node.js/PHP, dependendo da versão final)
 VS Code
+
 📁 Estrutura do Projeto
-portal-de-historias/
+
+mini-dicionario-waiwai/
 ├── index.html
+├── traducao.html
 ├── perfil.html
-├── biblioteca.html
-├── categorias.html
-├── nova-historia.html
-├── novo-capitulo.html
-├── visualizar-historia.html
-├── editar-perfil.html
-├── login.html
+├── favoritos.html
 ├── cadastro.html
+├── login.html
 ├── logout.html
-├── configuracoes.html
+├── sugestao-termo.html
+├── validacao.html
 ├── css/
 │   └── estilos.css
 ├── js/
@@ -44,15 +51,17 @@ portal-de-historias/
     └── logo.png
 
 🔒 Segurança da Informação
-Senhas não visíveis por padrão (com opção de mostrar)Autenticação de usuários
-Edição de dados restrita ao dono do perfil
-Logout com confirmação
-Acesso a histórias limitado por status
+
+Senhas protegidas e ocultas (com opção de visualizar)
+Autenticação segura por sessão
+Acesso e edição de dados restrito ao perfil do usuário
+Sugestões de termos passam por validação técnica e cultural
+Criptografia aplicada em dados sensíveis
+Termos de uso e política de privacidade seguindo a LGPD
+
 👥 Autores
-Williams C M Santos
-Projeto desenvolvido para a disciplina Laboratório de Desenvolvimento de Software
+Iolandino Xayukuma Wai Wai
+Projeto desenvolvido para a disciplina de Segurança da Informação, com foco na valorização de línguas indígenas e proteção de dados digitais.
+
 📌 Licença
-Este projeto é apenas para fins educacionais e não pode ser adaptado.
-
-
-
+Este projeto é educativo e voltado ao uso acadêmico, especialmente no contexto universitário indígena.
