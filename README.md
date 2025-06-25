@@ -1,10 +1,11 @@
 📚 Plataforma Wai Wai – Tradução Acadêmica para wai wai
 ______________________________________________________________________________________________________________________________________
-Bem-vindo à Plataforma Wai Wai, um site desenvolvido para facilitar a tradução de termos acadêmicos da língua portuguesa para lingua indigena wai wai 
+Bem-vindo à Plataforma Wai Wai, um site desenvolvido para facilitar a tradução de termos acadêmicos da língua portuguesa para lingua indigena wai wai. Voltado especialmente para estudantes, professores e linguistas, o portal promove a inclusão educacional e a valorização da língua indígena por meio de uma ferramenta segura, colaborativa e culturalmente respeitosa.
+
 🌐 Demonstração
 
 Acesse a versão pública do site aqui:
-👉 (link futuro do GitHub Pages ou servidor local)
+👉 (https://github.com/iolandino/tradutor-wayway.git)
 
 🎯 Objetivo
 
