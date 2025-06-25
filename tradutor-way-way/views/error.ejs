@@ -1,4 +1,5 @@
-block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+<main class="erro-container">
+    <h1 class="erro-message"><%= message %></h1>
+    <h2 class="erro-status"><%= error.status %></h2>
+    <pre class="erro-stack"><%= error.stack %></pre>
+</main>

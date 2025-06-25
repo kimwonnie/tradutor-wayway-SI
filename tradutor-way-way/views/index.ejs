@@ -1,4 +1,25 @@
-<main class="container">
-   <h1><%=title%></h1>
-    <p> Welcome to <%= title %> </p>
+<!-- Conteúdo Principal -->
+<img class="background-image" src="/images/_image.webp" alt="fundo do Tradutor Wai Wai">
+<main class="inicio-content">
+ 
+  <section class="section" id="tradutor">
+    <h2>Traduzir do Português para Wai Wai</h2>
+    <input type="text" id="translateInput" placeholder="Digite a palavra em Português" />
+    <div id="translationResult"></div>
+    <div id="message"></div>
+    <button id="btnTraduzir">Traduzir</button>
+    <button class="btn-sugerir" onclick="mostrarFormularioSugestao()">Sugerir novo termo</button>
+  </section>
+
+  <section class="section" id="cadastro" hidden>
+    <h2>Sugerir Novo Termo</h2>
+    <input type="text" id="suggestPt" placeholder="Palavra em Português" />
+    <input type="text" id="suggestWai" placeholder="Palavra em Wai Wai" />
+    <button onclick="submitSuggestion()">Enviar Sugestão</button>
+    <div id="messageSuggestion"></div>
+    <div id="suggestionsList"></div>
+    <button onclick="voltarParaTradutor()">Voltar</button>
+  </section>
 </main>
+
+<script src="/javascripts/inicio.js"></script>

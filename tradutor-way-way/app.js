@@ -1,14 +1,23 @@
-var createError = require('http-errors');
+require('dotenv').config(); // carrega '.env'
+
 var express = require('express');
 const expressLayouts = require('express-ejs-layouts');
-var session = require('express-session');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// Importação de Middlewares
+const catchNotFoundPage = require('./middlewares/capturarNotFoundPages');
+const errorHandling = require('./middlewares/tratamentoErro');
+const sessionConfig = require('./config/session');
+const sessionToViews = require('./middlewares/sessionToViews');
+const conectarMongo = require('./config/database');
+
+// Importação das rotas
 var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var cadastroRouter = require('./routes/cadastro');
+var perfilRouter = require('./routes/perfil');
 var sobreRouter = require('./routes/sobre');
 var sairRouter = require('./routes/sair');
 
@@ -20,46 +29,31 @@ app.set('layout', 'layout');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-/*Configuração do middleware de sessão
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // True se estiver usando HTTPS
-}));*/
-
-// Middleware para tornar a sessão disponível para todas as views
-app.use((req, res, next) => {
-  res.locals.session = req.session;
-  next();
-});
+// Conexão com o Banco de Dados MongoDB 
+conectarMongo();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Configuração do middleware de sessão
+app.use(sessionConfig);
+// Middleware para tornar a sessão disponível para todas as views
+app.use(sessionToViews);
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/cadastro', cadastroRouter);
+app.use('/perfil', perfilRouter);
 app.use('/sobre', sobreRouter);
 app.use('/sair', sairRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// Middleware para capturar erros 404 (página não encontrada)
+app.use(catchNotFoundPage);
+// Middleware de tratamento de erros
+app.use(errorHandling);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
 
 module.exports = app;

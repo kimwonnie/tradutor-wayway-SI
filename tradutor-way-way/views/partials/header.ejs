@@ -1,15 +1,24 @@
-<header>
-    <h1>Dicionário Wai Wai</h1>
-    <div class="menu-icon" onclick="toggleMenu()">☰</div>
-    <nav id="menu" class="hidden">
-      <ul>
-        <li><a href="/">Início</a></li>
-        <li><a href="/cadastro">Cadastro</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/sobre">Sobre</a></li>
-        <li><a href="/sair" onclick="logout()">Sair</a></li>
-      </ul>
-    </nav>
+<header id="cabecalho">
+    <h1 id="logo"><a href="/">Dicionário Wai Wai</a></h1>
+    <div id="navbar-contain">
+      <nav id="menu" class="hidden">
+        <ul>
+          <li><a href="/">Início</a></li>
+
+          <% if (session && session.usuario && session.usuario.id) { %>
+            <li><a href="/perfil">Perfil</a></li>
+            <li><a href="/sobre">Sobre</a></li>
+            <li><a href="/sair" onclick="logout()">Sair</a></li>
+          <% } else { %>
+            <li><a href="/cadastro">Cadastro</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/sobre">Sobre</a></li>
+          <% } %>
+          
+        </ul>
+      </nav>
+      <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    </div>
 </header>
 
 <script src="/javascripts/cabecalho.js"></script>
