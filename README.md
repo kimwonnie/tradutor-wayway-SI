@@ -13,8 +13,7 @@ O objetivo deste projeto é criar uma plataforma segura e acessível com:
 Tradução de termos acadêmicos Wai Wai ↔ Português
 Cadastro e login de usuários com autenticação
 Sugestão de novos termos (com validação por especialistas)
-Área do usuário com histórico e favoritos
-Acesso diferenciado para linguistas, professores e estudantes
+Acesso diferenciado para administradores e usuarios. 
 Interface acessível, com modo escuro e navegação intuitiva
 Preservação linguística com curadoria cultural
 
@@ -25,31 +24,48 @@ HTML5
 CSS3 (com gradiente em tons naturais)
 JavaScript
 Git e GitHub
-GitHub Pages (ou servidor Node.js/PHP, dependendo da versão final)
+Servidor Node.js
 VS Code
 
 📁 Estrutura do Projeto
 
-mini-dicionario-waiwai/
-├── index.html
-├── traducao.html
-├── perfil.html
-├── favoritos.html
-├── cadastro.html
-├── login.html
-├── logout.html
-├── sugestao-termo.html
-├── validacao.html
-├── css/
-│   └── estilos.css
-├── js/
-│   └── script.js
-└── img/
-    └── logo.png
+tradutor-wai-wai/
+├── bin/
+    └── www
+├── public/
+    └── javascripts
+    └── stylesheets
+├── routes/
+    └── cadastro.js
+    └── index.js
+    └── login.js
+    └── sair.js
+    └── sobre.js
+    └── users.js
+├── views/
+    ├── partials/
+        └── footer.ejs
+        └── header.ejs
+    └── cadastro.ejs
+    └── error.ejs
+    └── index.ejs
+    └── layout.ejs
+    └── login.ejs
+    └── sobre.ejs
+├── app.js 
+├── package-lock.json
+├── package.json
+├──.gitignore
+├──README.md
+ 
+
+    
 
 🔒 Segurança da Informação
 
 Senhas protegidas e ocultas (com opção de visualizar)
+Rota: tradutor-way-way/
+linhas: 
 Autenticação segura por sessão
 Acesso e edição de dados restrito ao perfil do usuário
 Sugestões de termos passam por validação técnica e cultural
