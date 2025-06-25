@@ -11,19 +11,12 @@ Acesse a versão pública do site aqui:
 🎯 Objetivo
 
 O objetivo deste projeto é criar uma plataforma segura e acessível com:
-
 Tradução de termos acadêmicos Wai Wai ↔ Português
-
 Cadastro e login de usuários com autenticação
-
 Sugestão de novos termos (com validação por especialistas)
-
 Área do usuário com histórico e favoritos
-
 Acesso diferenciado para linguistas, professores e estudantes
-
 Interface acessível, com modo escuro e navegação intuitiva
-
 Preservação linguística com curadoria cultural
 
 
