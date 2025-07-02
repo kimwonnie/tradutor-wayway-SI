@@ -1,0 +1,295 @@
+<main class="painelAdmin-content">
+    <h1>Painel do Administrador</h1>
+    <br>
+    <section class="painelAdmin-contain" id="gerenciar">
+        <h2>Usuários</h2>
+        <table class="tabela-usuarios">
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Tipos</th>
+                <th>Ações</th>
+            </tr>
+            <% usuarios.forEach(u => { %>
+                <tr>
+                    <td><%= u.nome %></td>
+                    <td><%= u.email %></td>
+                    <td><%= u.tipos.join(', ') %></td>
+                    <td>
+                        <% if (u.id !== admin.id) { %>
+                            <% if (!u.tipos.includes('admin')) { %>
+                                <form method="post" action="/admin/promover/<%= u._id %>" style="display:inline">
+                                    <button type="submit">Tornar Admin</button>
+                                </form>
+                            <% } else { %>
+                                <form method="post" action="/admin/rebaixar/<%= u._id %>" style="display:inline">
+                                    <button type="submit">Remover Admin</button>
+                                </form>
+                            <% } %>
+                            <% if (!u.tipos.includes('tradutor')) { %>
+                                <form method="post" action="/admin/promover/<%= u._id %>" style="display:inline">
+                                    <button type="submit">Tornar Tradutor</button>
+                                </form>
+                            <% } else { %>
+                                <form method="post" action="/admin/rebaixar/<%= u._id %>" style="display:inline">
+                                    <button type="submit">Remover Tradutor</button>
+                                </form>
+                            <% } %>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }) %>
+        </table>
+
+        <br><br><hr><br><br>
+
+        <h2>Solicitações para Tradutor</h2>
+        <% if (solicitacoesPendentes.length === 0) { %>
+            <p>Nenhuma solicitação pendente.</p>
+        <% } else { %>
+            <table class="tabela-sugestoes">
+                <thead>
+                    <tr>
+                        <th>Solicitado por</th>
+                        <th>Data da Solicitação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% solicitacoesPendentes.forEach(s => { %>
+                        <tr>
+                            <td><%= s.solicitadoPor?.nome %></td>
+                            <td><%= s.dataSolicitacao.toLocaleDateString() %></td>
+                            <td>
+                                <button onclick="aprovarSolicitacao('<%= s._id %>')">✅ Aprovar</button>
+                                <button onclick="rejeitarSolicitacao('<%= s._id %>')">❌ Rejeitar</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+
+        <br><hr><br>
+
+        <h2>Todas as Solicitações</h2>
+        <% if (solicitacoes.length === 0) { %>
+            <p>Ainda não há solicitações.</p>
+        <% } else { %>
+            <table class="tabela-sugestoes">
+                <thead>
+                    <tr>
+                        <th>Solicitado por</th>
+                        <th>Data da Solicitação</th>
+                        <th>Status</th>
+                        <th>Mensagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% solicitacoes.forEach(s => { %>
+                        <tr>
+                            <td><%= s.solicitadoPor?.nome %></td>
+                            <td><%= s.dataSolicitacao.toLocaleDateString() %></td>
+                            <td>
+                                <% if (s.status === 'aprovada') { %>
+                                    <span style="color: green;">Aprovada</span>
+                                <% } else if (s.status === 'rejeitada') { %>
+                                    <span style="color: red;">Rejeitada</span>
+                                <% } else if (s.status === 'pendente') { %>
+                                    <span style="color: orange;">Pendente</span>
+                                <% } %>
+                            </td>
+                            <td><%= s.mensagemAdmin || '-' %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+
+        <br><br><hr><br><br>
+  
+        <h2>Termos Cadastrados</h2>
+        <% if (palavras.length === 0) { %>
+            <p>Nenhum termo cadastrado.</p>
+        <% } else { %>
+            <table class="tabela-termos">
+                <thead>
+                    <tr>
+                        <th>Português</th>
+                        <th>Wai Wai</th>
+                        <th>Criado Por</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% palavras.forEach(p => { %>
+                        <tr>
+                            <td><%= p.portugues %></td>
+                            <td><%= p.waiwai %></td>
+                            <td><%= p.criadoPor?.nome || 'Desconhecido' %></td>
+                            <td>
+                                <button onclick="editarTermo('<%= p._id %>')">✏️ Editar</button>
+                                <button onclick="removerTermo('<%= p._id %>')">🗑️ Remover</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+  
+        <br><br><hr><br><br>
+  
+        <h2>Sugestões Pendentes</h2>
+        <% if ( sugestoesPendentes.length === 0) { %>
+            <p>Nenhuma sugestão pendente.</p>
+        <% } else { %>
+            <table class="tabela-sugestoes">
+                <thead>
+                    <tr>
+                        <th>Português</th>
+                        <th>Wai Wai</th>
+                        <th>Descrição</th>
+                        <th>Enviado por</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% sugestoesPendentes.forEach(s => { %>
+                        <tr>
+                            <td><%= s.portugues %></td>
+                            <td><%= s.waiwai %></td>
+                            <td><%= s.descricao || '-' %></td>
+                            <td><%= s.sugeridoPor?.nome || 'Desconhecido' %></td>
+                            <td>
+                                <button onclick="aprovarSugestao('<%= s._id %>')">✅ Aprovar</button>
+                                <button onclick="rejeitarSugestao('<%= s._id %>')">❌ Rejeitar</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+
+        <br><hr><br>
+
+        <h2>Todas as Sugestões</h2>
+        <% if (sugestoes.length === 0) { %>
+            <p>Ainda não há sugestões.</p>
+        <% } else { %>
+            <table class="tabela-sugestoes">
+                <thead>
+                    <tr>
+                        <th>Português</th>
+                        <th>Wai Wai</th>
+                        <th>Descrição</th>
+                        <th>Enviado por</th>
+                        <th>Status</th>
+                        <th>Mensagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% sugestoes.forEach(s => { %>
+                    <tr>
+                        <td><%= s.portugues %></td>
+                        <td><%= s.waiwai %></td>
+                        <td><%= s.descricao || '-' %></td>
+                        <td><%= s.sugeridoPor?.nome || 'Desconhecido' %></td>
+                        <td>
+                            <% if (s.status === 'aprovada') { %>
+                                <span style="color: green;">Aprovada</span>
+                            <% } else if (s.status === 'rejeitada') { %>
+                                <span style="color: red;">Rejeitada</span>
+                            <% } else if (s.status === 'pendente') { %>
+                                <span style="color: orange;">Pendente</span>
+                            <% } %>
+                        </td>
+                        <td><%= s.mensagemAvaliador || '-' %></td>
+                    </tr>
+                <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </section>
+
+    <section class="editarTermos-content" id="editarTermos" hidden>
+        <div class="editarTermos-contain">
+        <h2 style="text-align: center;">Editar Termo</h2>
+        <form id="formEditarTermo">
+            <input type="hidden" id="editarTermoId" />
+    
+            <label>Português:
+                <input type="text" id="editarTermoPt" required />
+            </label>
+    
+            <label>Wai Wai:
+                <input type="text" id="editarTermoWai" required />
+            </label>
+
+            <label>Descrição:
+                <textarea id="editarTermoDescricao"></textarea>
+            </label>
+
+            <button type="submit">Salvar Alterações</button>
+            <button type="button" onclick="cancelarEdicaoTermo()">Cancelar</button>
+        </form>
+        </div>
+    </section>
+</main>
+
+<!-- Modal Aprovar Solicitação -->
+<div id="aprovar-solicitacao" class="modal-aprovar" hidden>
+  <div class="solicitacao-contain">
+    <h3>Aprovar Solicitação</h3>
+    <input type="hidden" id="solicitacaoIdAprovar">
+    <label>Mensagem ao usuário (opcional):</label>
+    <textarea id="mensagemAprovarSolicitacao" placeholder="Mensagem..."></textarea>
+    <div class="modal-buttons">
+      <button onclick="confirmarSolicitacao()">Aprovar</button>
+      <button onclick="fecharModal('aprovar-solicitacao')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Rejeitar Solicitação -->
+<div id="rejeitar-solicitacao" class="modal-rejeitar" hidden>
+  <div class="solicitacao-contain">
+    <h3>Rejeitar Solicitação</h3>
+    <input type="hidden" id="solicitacaoIdRejeitar">
+    <label>Por que está rejeitando? (opcional):</label>
+    <textarea id="mensagemRejeitarSolicitacao" placeholder="Motivo..."></textarea>
+    <div class="modal-buttons">
+      <button onclick="recusarSolicitacao()">Rejeitar</button>
+      <button onclick="fecharModal('rejeitar-solicitacao')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Aprovar Sugestão -->
+<div id="aprovar-sugestao" class="modal-aprovar" hidden>
+  <div class="sugestao-contain">
+    <h3>Aprovar Sugestão</h3>
+    <input type="hidden" id="sugestaoIdAprovar">
+    <label>Mensagem ao usuário (opcional):</label>
+    <textarea id="mensagemAprovar" placeholder="Mensagem..."></textarea>
+    <div class="modal-buttons">
+      <button onclick="confirmarAprovacao()">Aprovar</button>
+      <button onclick="fecharModal('aprovar-sugestao')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Rejeitar Sugestão -->
+<div id="rejeitar-sugestao" class="modal-rejeitar" hidden>
+  <div class="sugestao-contain">
+    <h3>Rejeitar Sugestão</h3>
+    <input type="hidden" id="sugestaoIdRejeitar">
+    <label>Por que está rejeitando? (opcional):</label>
+    <textarea id="mensagemRejeitar" placeholder="Motivo..."></textarea>
+    <div class="modal-buttons">
+      <button onclick="confirmarRejeicao()">Rejeitar</button>
+      <button onclick="fecharModal('rejeitar-sugestao')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="/javascripts/gerenciar.js"></script>

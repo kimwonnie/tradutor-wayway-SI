@@ -11,7 +11,27 @@ router.get('/', (req, res) => {
 
 // POST /cadastro
 router.post('/', async (req, res) => {
-  const { nome, email, senha } = req.body;
+  const { nome, email, confirmarEmail, senha, confirmarSenha } = req.body;
+  
+  if (!nome || !email || !confirmarEmail || !senha || !confirmarSenha) {
+    return res.status(400).json({ sucesso: false, mensagem: 'Preencha todos os campos' });
+  }
+
+  // Validação de correspondência de e-mails
+  if (email !== confirmarEmail) {
+    return res.status(400).json({ sucesso: false, mensagem: 'Os e-mails não coincidem' });
+  }
+
+  // Validação de correspondência de senhas
+  if (senha !== confirmarSenha) {
+    return res.status(400).json({ sucesso: false, mensagem: 'As senhas não coincidem' });
+  }
+
+  // Validação de formato de e-mail
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ sucesso: false, mensagem: 'Formato de e-mail inválido' });
+  }
 
   try {
     // Verifica se o e-mail já está cadastrado
@@ -19,10 +39,7 @@ router.post('/', async (req, res) => {
     if (usuarioExistente) {
       return res.status(409).json({ sucesso: false, mensagem: 'E-mail já cadastrado' });
     }
-
-    if (!nome || !email || !senha) {
-      return res.status(400).json({ sucesso: false, mensagem: 'Preencha todos os campos' });
-    }
+    
     if (senha.length < 8) {
       return res.status(400).json({ sucesso: false, mensagem: 'A senha deve ter no mínimo 8 caracteres' });
     }
@@ -31,7 +48,7 @@ router.post('/', async (req, res) => {
     const novoUsuario = new Usuario({
       nome,
       email,
-      senha // será criptografada pelo pre('save')
+      senha
     });
 
     await novoUsuario.save();
@@ -40,7 +57,7 @@ router.post('/', async (req, res) => {
     req.session.usuario = {
       id: novoUsuario._id,
       nome: novoUsuario.nome,
-      tipo: novoUsuario.tipo
+      tipos: novoUsuario.tipos
     };
 
     res.status(201).json({ sucesso: true, mensagem: 'Cadastro realizado com sucesso' });

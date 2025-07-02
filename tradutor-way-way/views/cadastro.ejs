@@ -1,8 +1,13 @@
 <main class="cadastro-content">
-    <h2>Cadastro</h2>
-    <input type="text" id="registerName" placeholder="Nome completo" />
-    <input type="email" id="registerEmail" placeholder="Email" />
-    <input type="password" id="registerPassword" placeholder="Senha" />
-    <button onclick="registerUser()">Cadastrar</button>
-  </main>
+    <section class="cadastro-contain" id="usuario">
+        <h2>Cadastro</h2>
+        <input type="text" id="nomeUsuario" placeholder="Nome completo" />
+        <input type="email" id="emailUsuario" placeholder="Email" />
+        <input type="email" id="confirmarEmailUsuario" placeholder="Confirmar Email" />
+        <input type="password" id="senhaUsuario" placeholder="Senha (min: 8 caracteres)" />
+        <input type="password" id="confirmarSenhaUsuario" placeholder="Confirmar Senha" />
+        <button onclick="registro()">Cadastrar</button>
+    </section>
+</main>
+
 <script src="/javascripts/cadastro.js"></script>

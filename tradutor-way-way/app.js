@@ -18,6 +18,9 @@ var indexRouter = require('./routes/index');
 var loginRouter = require('./routes/login');
 var cadastroRouter = require('./routes/cadastro');
 var perfilRouter = require('./routes/perfil');
+var palavraRouter = require('./routes/palavras');
+var painelTradutorRouter = require('./routes/tradutor');
+var painelAdminRouter = require('./routes/admin');
 var sobreRouter = require('./routes/sobre');
 var sairRouter = require('./routes/sair');
 
@@ -43,10 +46,18 @@ app.use(sessionConfig);
 // Middleware para tornar a sessão disponível para todas as views
 app.use(sessionToViews);
 
+// Rota para verificar se está logado (usada pelo front)
+app.get('/verificar-login', (req, res) => {
+  res.json({ logado: !!req.session.usuario });
+});
+
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/cadastro', cadastroRouter);
 app.use('/perfil', perfilRouter);
+app.use('/palavras', palavraRouter);
+app.use('/tradutor', painelTradutorRouter);
+app.use('/admin', painelAdminRouter);
 app.use('/sobre', sobreRouter);
 app.use('/sair', sairRouter);
 

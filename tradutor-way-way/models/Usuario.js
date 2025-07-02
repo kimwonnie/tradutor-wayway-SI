@@ -5,16 +5,8 @@ const usuarioSchema = new mongoose.Schema({
   nome: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   senha: { type: String, required: true, unique: true },
-  tipo: {
-    type: String,
-    enum: ['usuario', 'tradutor', 'admin'],
-    default: 'usuario'
-  },
-  dataCadastro: { type: Date, default: Date.now },
-  fotoPerfil: {
-    type: String,
-    default: '/images/default.jpg'
-  }
+  tipos: { type: [String], enum: ['público', 'tradutor', 'admin'], default: ['público'] },
+  dataCadastro: { type: Date, default: Date.now }
 });
 
 // Hash da senha antes de salvar
