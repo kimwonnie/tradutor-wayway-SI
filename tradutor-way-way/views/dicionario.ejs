@@ -1,0 +1,26 @@
+<main class="dicionario-content">
+  <h2>Dicionário Wai Wai</h2>
+
+  <% if (palavras.length === 0) { %>
+    <p>Nenhuma palavra cadastrada ainda.</p>
+  <% } else { %>
+    <table class="dicionario-tabela">
+      <thead>
+        <tr>
+          <th>Português</th>
+          <th>Wai Wai</th>
+          <th>Descrição</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% palavras.forEach(p => { %>
+          <tr>
+            <td><%= p.portugues %></td>
+            <td><%= p.waiwai %></td>
+            <td><%= p.descricao || '-' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</main>

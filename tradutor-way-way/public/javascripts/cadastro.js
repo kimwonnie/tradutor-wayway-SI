@@ -1,20 +1,22 @@
-async function registerUser() {
-  const nome = document.getElementById('registerName').value.trim();
-  const email = document.getElementById('registerEmail').value.trim();
-  const senha = document.getElementById('registerPassword').value;
-
+async function registro() {
+  const nome = document.getElementById('nomeUsuario').value.trim();
+  const email = document.getElementById('emailUsuario').value.trim();
+  const confirmarEmail = document.getElementById('confirmarEmailUsuario').value.trim();
+  const senha = document.getElementById('senhaUsuario').value;
+  const confirmarSenha = document.getElementById('confirmarSenhaUsuario').value;
+  
   try {
     const resposta = await fetch('/cadastro', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nome, email, senha })
+      body: JSON.stringify({ nome, email, confirmarEmail, senha, confirmarSenha })
     });
 
     const dados = await resposta.json();
 
     if (dados.sucesso) {
       alert(dados.mensagem);
-      window.location.href = '/'; // ou página principal
+      window.location.href = '/'; // página principal
     } else {
       alert(dados.mensagem);
     }

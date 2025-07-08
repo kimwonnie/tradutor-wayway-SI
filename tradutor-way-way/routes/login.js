@@ -12,17 +12,17 @@ router.get('/', (req, res) => {
 // POST /login
 router.post('/', async (req, res) => {
   const { email, senha } = req.body;
+  
+  // Verifica se a senha foi enviada
+  if (!senha) {
+    return res.status(400).json({ sucesso: false, mensagem: 'Senha não informada' });
+  }
 
   try {
     // Verifica se o e-mail existe
     const usuario = await Usuario.findOne({ email });
     if (!usuario) {
       return res.status(401).json({ sucesso: false, mensagem: 'E-mail não cadastrado' });
-    }
-    
-    // Verifica se a senha foi enviada
-    if (!senha) {
-      return res.status(400).json({ sucesso: false, mensagem: 'Senha não informada' });
     }
 
     // Compara a senha
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
     req.session.usuario = {
       id: usuario._id,
       nome: usuario.nome,
-      tipo: usuario.tipo
+      tipos: usuario.tipos
     };
 
     res.json({ sucesso: true, mensagem: 'Login bem-sucedido' });

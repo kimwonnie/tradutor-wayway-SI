@@ -1,22 +1,29 @@
 <header id="cabecalho">
-    <h1 id="logo"><a href="/">Dicionário Wai Wai</a></h1>
+    <h1 id="logo"><a href="/">Tradutor Wai Wai</a></h1>
     <div id="navbar-contain">
       <nav id="menu" class="hidden">
         <ul>
           <li><a href="/">Início</a></li>
-
-          <% if (session && session.usuario && session.usuario.id) { %>
+          <li><a href="/palavras/dicionario">Dicionário</a></li>
+          <% if(session && session.usuario && session.usuario.id) { %>
             <li><a href="/perfil">Perfil</a></li>
+            <% if (session.usuario.tipos.includes('admin') && session.usuario.modoConta === 'admin') { %>
+              <li><a href="/admin/gerenciar">Painel do Administrador</a></li>
+            <% } else if (session.usuario.tipos.includes('tradutor') && session.usuario.modoConta === 'tradutor') { %>
+              <li><a href="/tradutor/gerenciar">Painel do Tradutor</a></li>
+            <% } %>
             <li><a href="/sobre">Sobre</a></li>
             <li><a href="/sair" onclick="logout()">Sair</a></li>
           <% } else { %>
-            <li><a href="/cadastro">Cadastro</a></li>
             <li><a href="/login">Login</a></li>
+            <li><a href="/cadastro">Cadastro</a></li>
             <li><a href="/sobre">Sobre</a></li>
           <% } %>
-          
         </ul>
       </nav>
+      <% if(session && session.usuario && session.usuario.id) { %>
+        <p id="saudacao">Olá, <a href="/perfil"><%= session.usuario.nome %></a></p>
+      <% } %>
       <div class="menu-icon" onclick="toggleMenu()">☰</div>
     </div>
 </header>

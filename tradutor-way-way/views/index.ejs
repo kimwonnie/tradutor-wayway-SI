@@ -1,25 +1,36 @@
 <!-- Conteúdo Principal -->
-<img class="background-image" src="/images/_image.webp" alt="fundo do Tradutor Wai Wai">
 <main class="inicio-content">
- 
-  <section class="section" id="tradutor">
-    <h2>Traduzir do Português para Wai Wai</h2>
-    <input type="text" id="translateInput" placeholder="Digite a palavra em Português" />
-    <div id="translationResult"></div>
-    <div id="message"></div>
-    <button id="btnTraduzir">Traduzir</button>
-    <button class="btn-sugerir" onclick="mostrarFormularioSugestao()">Sugerir novo termo</button>
-  </section>
-
-  <section class="section" id="cadastro" hidden>
-    <h2>Sugerir Novo Termo</h2>
-    <input type="text" id="suggestPt" placeholder="Palavra em Português" />
-    <input type="text" id="suggestWai" placeholder="Palavra em Wai Wai" />
-    <button onclick="submitSuggestion()">Enviar Sugestão</button>
-    <div id="messageSuggestion"></div>
-    <div id="suggestionsList"></div>
-    <button onclick="voltarParaTradutor()">Voltar</button>
-  </section>
+  <% if (session && session.usuario && session.usuario.id && session.usuario.tipos.includes('tradutor') && session.usuario.modoConta === 'tradutor') { %>
+    <section class="section" id="i-cadastrar">
+      <h2>Cadastrar Novo Termo</h2>
+      <input type="text" id="cadastrarPt" placeholder="Termo em Português (Obrigatório)" />
+      <input type="text" id="cadastrarWai" placeholder="Termo em Wai Wai (Obrigatório)" />
+      <textarea name="descricao" id="cadastrarDescricao" placeholder="Descrição do termo (Opcional)"></textarea>
+      <div id="messageCadastrado"></div>
+      <button onclick="cadastrarTermo()">Cadastrar Termo</button>
+    </section>
+  <% } else { %>
+    <section class="section" id="i-traduzir">
+      <h2>Traduzir do Português para Wai Wai</h2>
+      <input type="text" id="translateInput" placeholder="Digite o termo em Português" />
+      <div id="translationResult"></div>
+      <div id="message"></div>
+      <button id="btnTraduzir">Traduzir</button>
+      <br>
+      <div id="messageNaoLogado"></div>
+      <button class="btn-sugerir" onclick="mostrarFormularioSugestao()">Sugerir Novo Termo</button>
+    </section>
+  
+    <section class="section" id="i-sugerir" hidden>
+      <h2>Sugerir Novo Termo</h2>
+      <input type="text" id="suggestPt" placeholder="Termo em Português (Obrigatório)" />
+      <input type="text" id="suggestWai" placeholder="Termo em Wai Wai (Obrigatório)" />
+      <textarea name="descricao" id="suggestDescricao" placeholder="Descrição do termo (Opcional)"></textarea>
+      <div id="messageSuggestion"></div>
+      <button onclick="submitSuggestion()">Enviar Sugestão</button>
+      <button onclick="voltarParaTradutor()">Voltar</button>
+    </section>
+  <% } %>
 </main>
 
 <script src="/javascripts/inicio.js"></script>

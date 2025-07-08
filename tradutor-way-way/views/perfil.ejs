@@ -1,6 +1,131 @@
 <main class="perfil-content"> 
-  <h2>Perfil do Tradutor</h2>
-  <p>Nome: <span id="perfilNome"><%= usuario.nome %></span></p>
-  <p>Email: <span id="perfilEmail"><%= usuario.email %></span></p>
-  <p>Tipo de Usuário: <span id="perfilTipoUsuario"><%= usuario.tipo %></span></p>
-  </main>
+    <section class="perfil-contain" id="dados-perfil">
+        <h2>Meus Dados</h2>
+        <br>
+        <p>Nome: <span id="perfilNome"><%= usuario.nome %></span></p>
+        <p>Email: <span id="perfilEmail"><%= usuario.email %></span></p>
+        <br>
+        <p>Você está usando a conta como: <strong><%= modoAtual %></strong></p>
+        <br>
+        <button id="btnEditarPerfil" onclick="editarPerfil()">Editar</button>
+        <br>
+        <br>
+        <% if (session.usuario.modoConta) { %>
+            <% if (session.usuario.modoConta === 'admin') { %>
+                <a href="/admin/gerenciar" style="text-decoration: none; color: #000;"><button>Painel do Administrador</button></a>
+            <% } else if (session.usuario.modoConta === 'tradutor') { %>
+                <a href="/tradutor/gerenciar" style="text-decoration: none; color: #000;"><button>Painel do Tradutor</button></a>
+            <% } %>
+        <% } %>
+        <button id="btnConfigurarConta" onclick="configurarConta()">Configurações da Conta</button>
+    </section>
+
+    <section class="perfil-contain" id="form-perfil" hidden>
+        <h2>Meus Dados</h2>
+        <br>
+        <form id="formEditarPerfil">
+            <label>Nome:
+                <input type="text" id="editarNome" value="<%= usuario.nome %>" />
+            </label>
+            <label>Email:
+                <input type="email" id="editarEmail" value="<%= usuario.email %>" />
+            </label>
+            <label for="modoConta">
+              Modo da Conta:
+              <select id="modoConta" name="modoConta">
+                <% if (usuario.tipos.includes('público')) { %>
+                  <option value="público" <%= modoAtual === 'público' ? 'selected' : '' %>>Público</option>
+                <% } %>
+                <% if (usuario.tipos.includes('tradutor')) { %>
+                  <option value="tradutor" <%= modoAtual === 'tradutor' ? 'selected' : '' %>>Tradutor</option>
+                <% } %>
+                <% if (usuario.tipos.includes('admin')) { %>
+                  <option value="admin" <%= modoAtual === 'admin' ? 'selected' : '' %>>Administrador</option>
+                <% } %>
+              </select>
+            </label>
+            <br>
+            <button type="submit">Salvar Alterações</button>
+            <button type="button" id="btnCancelarEdicao" onclick="cancelarEdicao()">Cancelar</button>
+        </form>
+    </section>
+
+    <section class="perfil-contain" id="configurar-conta" hidden>
+        <h2>Configurações</h2>
+        <br>
+        <button onclick="alterarSenha()">Alterar Senha</button>
+        <% if (usuario.tipos.includes('admin')) { %>
+            <button onclick="desvincularAdmin()">Não quero ser Administrador</button>
+        <% } %>
+        <% if (usuario.tipos.includes('tradutor')) { %>
+            <button onclick="desvincularTradutor()">Não quero ser Tradutor</button>
+            <p style="text-align: justify; font-size: 14px;"><strong>Obs.:</strong> Para excluir a conta você não deve ser "Tradutor" e nem "Administrador".</p>
+        <% } else { %>
+            <button onclick="solicitarTradutor()">Quero ser Tradutor</button>
+            <button onclick="excluirConta()">Excluir Conta</button>
+        <% } %>
+        <button onclick="fecharConfiguracoes()">Voltar</button>
+    </section>
+
+    <section class="perfil-contain" id="form-senha" hidden>
+        <h2>Alterar Senha</h2>
+        <br>
+        <form id="formEditarSenha">
+            <label>Senha Atual:
+                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual" />
+            </label>
+            <label>Nova senha: (min: 8 caracteres)
+                <input type="password" id="novaSenha" placeholder="Digite a nova senha" />
+            </label>
+            <label>Confirmar nova senha:
+                <input type="password" id="confirmarNovaSenha" placeholder="Confirme a nova senha" />
+            </label>
+            <br>
+            <button type="submit">Alterar</button>
+            <button type="button" id="btnCancelarSenha" onclick="cancelarSenha()">Cancelar</button>
+        </form>
+    </section>
+
+    <section class="meus-termos-sugeridos" id="termos-sugeridos">
+      <h2>Minhas Sugestões</h2>
+      <br>
+      <% if (sugestoes.length === 0) { %>
+        <p>Você ainda não sugeriu nenhum termo.</p>
+        <% } else { %>
+          <table class="tabela-sugestoes">
+            <thead>
+              <tr>
+                <th>Português</th>
+                <th>Wai Wai</th>
+                <th>Descrição</th>
+                <th>Status</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% sugestoes.forEach(s => { %>
+                <tr>
+                  <td><%= s.portugues %></td>
+                  <td><%= s.waiwai %></td>
+                  <td><%= s.descricao || '-' %></td>
+                  <td>
+                    <% if (s.status === 'pendente') { %>
+                      <span style="color: orange;">Pendente</span>
+                    <% } else if (s.status === 'aprovada') { %>
+                      <span style="color: green;">Aprovada</span>
+                    <% } else { %>
+                      <span style="color: red;">Rejeitada</span>
+                    <% } %>
+                  </td>
+                        
+                      
+                  <td><%= s.mensagemAvaliador %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } %>
+    </section>
+</main>
+
+<script src="/javascripts/perfil.js"></script>

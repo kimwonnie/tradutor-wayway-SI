@@ -17,7 +17,7 @@ async function loginUser() {
     if (dados.sucesso) {
       mensagem.textContent = 'Login bem-sucedido!';
       mensagem.style.color = 'green';
-      // Redireciona para home
+      // Redireciona para página inicial
       window.location.href = '/';
     } else {
       mensagem.textContent = dados.mensagem;

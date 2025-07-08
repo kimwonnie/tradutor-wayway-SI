@@ -1,12 +1,4 @@
-// Simulação de dicionário
-const dicionarioSimulado = {
-  "universidade": "wai-universi",
-  "livro": "wai-libru",
-  "aula": "wai-aura"
-};
-
-// Tradução
-function translate() {
+async function translate() {
   const input = document.getElementById("translateInput").value.trim().toLowerCase();
   const resultDiv = document.getElementById("translationResult");
   const messageDiv = document.getElementById("message");
@@ -19,46 +11,127 @@ function translate() {
     return;
   }
 
-  if (dicionarioSimulado[input]) {
-    resultDiv.innerHTML = `<strong>Tradução:</strong> ${dicionarioSimulado[input]}`;
-  } else {
-    resultDiv.innerHTML = `Palavra não encontrada.`;
+  try {
+    const resposta = await fetch(`/palavras/buscar?termo=${encodeURIComponent(input)}`);
+    const dados = await resposta.json();
+
+    if (dados.sucesso) {
+      resultDiv.innerHTML = `<strong>Tradução:</strong> ${dados.traducao}`;
+      if (dados.descricao) {
+        resultDiv.innerHTML += `<br><em>${dados.descricao}</em>`;
+      }
+    } else {
+      resultDiv.textContent = dados.mensagem || "Palavra não encontrada.";
+    }
+  } catch (erro) {
+    console.error('Erro ao buscar tradução:', erro);
+    messageDiv.textContent = 'Erro ao buscar tradução.';
   }
 }
 
 // Mostrar/ocultar formulários
 function mostrarFormularioSugestao() {
-  document.getElementById("tradutor").hidden = true;
-  document.getElementById("cadastro").hidden = false;
+  const messageDiv = document.getElementById('messageNaoLogado');
+  messageDiv.textContent = ''; // limpa mensagem anterior
+  fetch('/verificar-login')
+    .then(res => res.json())
+    .then(dados => {
+      if (dados.logado) {
+        document.getElementById("i-traduzir").hidden = true;
+        document.getElementById("i-sugerir").hidden = false;
+        document.getElementById("translateInput").value = '';
+        document.getElementById("translationResult").textContent = '';
+        document.getElementById("message").textContent = "";
+      } else {
+        messageDiv.textContent = 'Você precisa estar logado para sugerir um termo.';
+      }
+    })
+    .catch(err => {
+      console.error('Erro ao verificar login:', err);
+      alert('Erro ao verificar login. Tente novamente mais tarde.');
+    });
 }
 
 function voltarParaTradutor() {
-  document.getElementById("cadastro").hidden = true;
-  document.getElementById("tradutor").hidden = false;
+  document.getElementById("i-sugerir").hidden = true;
+  document.getElementById("i-traduzir").hidden = false;
+  document.getElementById('suggestPt').value = "";
+  document.getElementById('suggestWai').value = "";
+  document.getElementById('suggestDescricao').value = "";
+  document.getElementById('messageSuggestion').textContent = "";
+}
+
+function mostrarFormularioCadastroTermo() {
+  document.getElementById("i-traduzir").hidden = true;
+  document.getElementById("i-cadastrar").hidden = false;
+  document.getElementById("translateInput").value = '';
+  document.getElementById("translationResult").textContent = '';
+  document.getElementById("message").textContent = "";
+}
+
+function retornarParaTradutor() {
+  document.getElementById("i-cadastrar").hidden = true;
+  document.getElementById("i-traduzir").hidden = false;
+  document.getElementById('cadastrarPt').value = "";
+  document.getElementById('cadastrarWai').value = "";
+  document.getElementById('cadastrarDescricao').value = "";
+  document.getElementById('messageCadastrado').textContent = "";
 }
 
 // Enviar sugestão
-function submitSuggestion() {
-  const pt = document.getElementById("suggestPt").value.trim();
-  const wai = document.getElementById("suggestWai").value.trim();
-  const msg = document.getElementById("messageSuggestion");
-  const list = document.getElementById("suggestionsList");
+async function submitSuggestion() {
+  const portugues = document.getElementById('suggestPt').value.trim();
+  const waiwai = document.getElementById('suggestWai').value.trim();
+  const descricao = document.getElementById('suggestDescricao').value.trim();
+  const messageDiv = document.getElementById('messageSuggestion');
 
-  msg.textContent = "";
-  list.innerHTML = "";
+  messageDiv.textContent = "";
 
-  if (!pt || !wai) {
-    msg.textContent = "Preencha ambos os campos.";
+  if (!portugues || !waiwai) {
+    messageDiv.textContent = "Preencha os campos obrigatórios.";
     return;
   }
 
-  // Aqui futuramente entra a lógica para enviar ao backend via fetch/AJAX
-  msg.textContent = "Sugestão enviada para análise!";
-  list.innerHTML = `<p><strong>${pt}</strong> → ${wai}</p>`;
+  try {
+    const resposta = await fetch('/palavras/sugestoes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ portugues, waiwai, descricao })
+    });
 
-  // Limpa os campos
-  document.getElementById("suggestPt").value = "";
-  document.getElementById("suggestWai").value = "";
+    const dados = await resposta.json();
+    messageDiv.textContent = dados.mensagem;
+  } catch (erro) {
+    console.error('Erro ao sugerir termo:', erro);
+    messageDiv.textContent = "Erro ao enviar sugestão.";
+  }
+}
+
+
+// Cadastrar novo termo
+async function cadastrarTermo() {
+  const portugues = document.getElementById('cadastrarPt').value.trim();
+  const waiwai = document.getElementById('cadastrarWai').value.trim();
+  const descricao = document.getElementById('cadastrarDescricao').value.trim();
+
+  if (!portugues || !waiwai) {
+    document.getElementById('messageCadastrado').innerText = 'Preencha os campos obrigatórios!';
+    return;
+  }
+
+  try {
+    const resposta = await fetch('/palavras', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ portugues, waiwai, descricao })
+    });
+
+    const dados = await resposta.json();
+    document.getElementById('messageCadastrado').innerText = dados.mensagem;
+  } catch (erro) {
+    console.error('Erro ao cadastrar termo:', erro);
+    document.getElementById('messageCadastrado').innerText = 'Erro ao cadastrar o termo.';
+  }
 }
 
 // Espera o DOM carregar para conectar os eventos
